@@ -1,0 +1,78 @@
+{
+  "version": "1.0",
+  "project_root": "/Users/jamielaframboise/Documents/AI Work/ai_development_team",
+  "command_rules": {
+    "allowed_commands": [
+      "git",
+      "python -m pip install",
+      "find", "grep",
+      "mkdir", "touch",
+      "cat", "head", "tail",
+      "ls", "pwd"
+    ],
+    "blocked_patterns": [
+      ".*\\.(py|sh|exe|js|ts|java|rb|go|rs)$",
+      "rm",
+      "sudo",
+      "curl",
+      "wget",
+      "&&", "||", ";",
+      ">", ">>"
+    ],
+    "require_approval_for": [
+      ".*\\.(json|yaml|yml|toml|ini|py)$"
+    ]
+  },
+  "file_access": {
+    "allowed_paths": [
+      "/Users/jamielaframboise/Documents/AI Work/ai_development_team/**"
+    ],
+    "readonly_paths": [
+      "/Users/jamielaframboise/Documents/AI Work/ai_development_team/.git/**"
+    ]
+  },
+  "safety": {
+    "command_timeout_seconds": 900,
+    "max_command_output_bytes": 1048576,
+    "enable_command_logging": true,
+    "command_log_file": "command_log.txt",
+    "auto_rollback_on_error": true,
+    "max_retry_attempts": 3
+  },
+  "environment": {
+    "SAFE_MODE": "true",
+    "AUTO_APPROVE": "true",
+    "PYTHONUNBUFFERED": "1"
+  },
+  "auto_approve": {
+    "patterns": [
+      "**/*.py",
+      "**/*.md",
+      "**/*.txt",
+      "**/*.json",
+      "**/*.yaml",
+      "**/*.yml",
+      "**/*.toml",
+      "**/*.ini",
+      "**/requirements*.txt",
+      "**/setup.py",
+      "**/pyproject.toml",
+      "**/Dockerfile*",
+      "**/docker-compose*.yml",
+      "**/.dockerignore",
+      "**/.gitignore",
+      "**/README*",
+      "**/docs/**",
+      "**/tests/**",
+      "**/examples/**"
+    ],
+    "exclude_patterns": [
+      "**/venv/**",
+      "**/.venv/**",
+      "**/__pycache__/**",
+      "**/.pytest_cache/**",
+      "**/.mypy_cache/**",
+      "**/.git/**"
+    ]
+  }
+}

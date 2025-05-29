@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  ai-dev-team:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-dev-team
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ~/.gitconfig:/home/developer/.gitconfig
+    environment:
+      - PYTHONUNBUFFERED=1
+    tty: true
+    stdin_open: true
+    user: developer
+    ports:
+      - "8000:8000"  # For any web interface if needed
+    networks:
+      - ai-dev-network
+
+networks:
+  ai-dev-network:
+    driver: bridge
+
+volumes:
+  gitconfig:

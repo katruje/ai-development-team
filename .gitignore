@@ -19,6 +19,8 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Testing
 .pytest_cache/
 .coverage
 htmlcov/
@@ -30,17 +32,30 @@ env/
 ENV/
 .venv/
 
+# Docker
+.docker/
+**/docker-compose.override.yml
+**/docker-compose.override.yaml
+
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
 
 # Project specific
 .env
 .env.*
 !.env.example
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
 
 # Logs
 logs/
@@ -52,44 +67,19 @@ local_settings.py
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# VS Code
-.vscode/settings.json
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Project specific test artifacts
-test-results/
-
-# Test directories
-test_project/
-
-# Project specific
-.venv/
-.env
-.venv*
-
-# Logs
-logs/
-*.log
-
-# Local development
-*.env.local
-*.env.development.local
-*.env.test.local
-*.env.production.local
-
 # Project artifacts
 artifacts/
-.coverage
-htmlcov/
+test-results/
+test_project/
 
-# Jupyter Notebook
-.ipynb_checkpoints
+# Docker Compose
+*.bak
+*.stack.cache
+
+# Temporary files
+*.swp
+*~
+
+# Build output
+build/
+dist/

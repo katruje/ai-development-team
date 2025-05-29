@@ -9,6 +9,7 @@ An autonomous AI development team that can build software based on high-level re
 - 📊 **Architecture Design**: AI-assisted system design and architecture planning
 - 🔍 **Code Analysis**: Intelligent code review and quality assessment
 - 🛠️ **CLI Interface**: Easy-to-use command-line interface
+- 🐳 **Docker Support**: Containerized development environment
 - 📦 **Modular Design**: Extensible architecture for adding new capabilities
 
 ## 🚀 Quick Start
@@ -18,8 +19,9 @@ An autonomous AI development team that can build software based on high-level re
 - Python 3.9+
 - Git
 - pip (Python package manager)
+- Docker & Docker Compose (for containerized development)
 
-### Installation
+### Local Development Setup
 
 1. Clone the repository:
    ```bash
@@ -41,6 +43,24 @@ An autonomous AI development team that can build software based on high-level re
 4. Set up pre-commit hooks:
    ```bash
    pre-commit install
+   ```
+
+### Docker Development Setup
+
+1. Build and start the development container:
+   ```bash
+   ./dev.sh build
+   ./dev.sh start
+   ```
+
+2. Access the container shell:
+   ```bash
+   ./dev.sh shell
+   ```
+
+3. Stop the container when done:
+   ```bash
+   ./dev.sh stop
    ```
 
 ## 🛠️ Usage
@@ -82,12 +102,17 @@ ai_development_team/
 ├── services/             # Reusable services
 ├── config/               # Configuration management
 ├── tests/                # Test suite
-└── docs/                 # Documentation
+├── docs/                 # Documentation
+├── .windsurf/            # Development environment configuration
+├── Dockerfile            # Container configuration
+└── docker-compose.yml    # Service definitions
 ```
 
 ## 📚 Documentation
 
 - [Architecture](./docs/architecture.md) - System architecture and design decisions
+- [Development Guide](./docs/development.md) - Setting up the development environment
+- [API Reference](./docs/api.md) - Detailed API documentation
 - [Changelog](./CHANGELOG.md) - Development history and changes
 
 ## 🧪 Development
@@ -99,6 +124,43 @@ We enforce consistent code style using:
 - `isort` - Import sorting
 - `flake8` - Linting
 - `mypy` - Static type checking
+
+### Development Scripts
+
+We provide a `dev.sh` script to simplify common development tasks:
+
+```bash
+# Build the development container
+./dev.sh build
+
+# Start the development environment
+./dev.sh start
+
+# Run tests
+./dev.sh test
+
+# Run linters
+./dev.sh lint
+
+# Format code
+./dev.sh format
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## ⚙️ Workspace Configuration
+
+This project includes a `.vscode/Windsurf.code-workspace` file with pre-configured settings for auto-approval of common development files. This helps streamline the development workflow by reducing manual approvals for standard file operations.
+
+> **Test Note**: This update was made to verify auto-approval functionality. If you can see this note without having to approve the change, the auto-approval is working correctly!
+
+> **Final Test**: This is a final test after updating VS Code user settings. If you can see this without approving, the configuration is working!
 
 ### Running Tests
 
