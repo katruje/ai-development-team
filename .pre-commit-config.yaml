@@ -1,0 +1,69 @@
+repos:
+-   repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+    - id: black
+      language_version: python3.9
+      types_or: [python, pyi]
+
+-   repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+    - id: isort
+      name: isort (python)
+      description: Sort Python import definitions
+      entry: isort --profile black
+      language: system
+      types: [python]
+
+-   repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+    - id: flake8
+      additional_dependencies: [flake8-bugbear==24.2.6]
+      types: [python]
+
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+    - id: mypy
+      additional_dependencies:
+        - types-PyYAML>=6.0.0
+        - types-requests>=2.31.0
+      args: [--strict, --ignore-missing-imports]
+      exclude: ^tests/.*$
+
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+    - id: trailing-whitespace
+    - id: end-of-file-fixer
+    - id: check-yaml
+    - id: check-added-large-files
+    - id: check-merge-conflict
+    - id: check-ast
+    - id: check-case-conflict
+    - id: check-docstring-first
+    - id: check-json
+    - id: check-toml
+    - id: check-xml
+    - id: debug-statements
+    - id: detect-private-key
+    - id: mixed-line-ending
+      args: [--fix=lf]
+    - id: requirements-txt-fixer
+    - id: fix-encoding-pragma
+      args: [--remove]
+
+-   repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.12.0
+    hooks:
+    - id: commitizen
+      stages: [commit-msg]
+      additional_dependencies: ["commitizen==3.12.0"]
+
+ci:
+  autofix_commit_msg: "chore: [pre-commit.ci] auto fixes from pre-commit.com hooks"
+  autoupdate_commit_msg: "chore: [pre-commit.ci] pre-commit autoupdate"
+  autofix_prs: true
+  autoupdate_schedule: weekly

@@ -83,3 +83,10 @@ test_project/
 # Build output
 build/
 dist/
+
+# Generated files
+generated/
+
+# Local development
+local_settings.py
+local_config.py

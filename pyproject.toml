@@ -7,7 +7,7 @@ name = "ai-development-team"
 version = "0.1.0"
 description = "An autonomous AI development team for building software"
 authors = [
-    {name = "Your Name", email = "your.email@example.com"}
+    {name = "AI Development Team", email = "dev@aidevteam.example.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.9"
@@ -19,7 +19,14 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Code Generators",
 ]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/ai-development-team"
+Documentation = "https://github.com/yourusername/ai-development-team#readme"
+Issues = "https://github.com/yourusername/ai-development-team/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -30,11 +37,30 @@ dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
     "pre-commit>=3.0.0",
+    "pytest-mock>=3.10.0",
+    "types-PyYAML>=6.0.0",
 ]
 
-[tool.setuptools]
-packages = []
-package-dir = { "" = "." }
+ai = [
+    "openai>=1.0.0",
+    "langchain>=0.0.200",
+    "tiktoken>=0.5.0",
+]
+
+cli = [
+    "click>=8.0.0",
+    "rich>=13.0.0",
+    "pyyaml>=6.0.0",
+]
+
+all = [
+    "ai-development-team[ai]",
+    "ai-development-team[cli]",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ai_development_team"]
 
 [tool.black]
 line-length = 88
@@ -44,9 +70,42 @@ include = '\\.pyi?$'
 [tool.isort]
 profile = "black"
 line_length = 88
+known_first_party = ["ai_development_team"]
 
 [tool.mypy]
 python_version = "3.9"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = ["pytest", "_pytest"]
+ignore_missing_imports = true
+
+[project.scripts]
+ai-dev-team = "ai_development_team.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --cov=ai_development_team --cov-report=term-missing"
+
+[tool.coverage.run]
+source = ["ai_development_team"]
+omit = ["**/tests/*", "**/__pycache__/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "pass",
+]
