@@ -1,6 +1,8 @@
 # AI Development Team
 
-An autonomous AI development team that can build software based on high-level requirements through specialized AI agents working together.
+A personal project implementing an autonomous AI development team that can build software based on high-level requirements through specialized AI agents working together.
+
+> **Note**: This is a personal project and not currently accepting external contributions.
 
 ## ✨ Features
 
@@ -204,16 +206,6 @@ Pre-commit hooks are configured to automatically format and check your code befo
 pre-commit install
 ```
 
-## 🤝 Contributing
-
-Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -232,12 +224,6 @@ This project is currently in **active development**. Major features are being ad
 - [ ] Integration with popular AI models
 - [ ] Plugin system for extending functionality
 - [ ] More agent specializations
-
-## 🙏 Acknowledgments
-
-- Inspired by the vision of autonomous AI development teams
-- Built with ❤️ by the open-source community
-- Thanks to all contributors who have helped shape this project
 
 ## 🛠️ Usage
 
@@ -322,9 +308,6 @@ We provide a `dev.sh` script to simplify common development tasks:
 ./dev.sh format
 ```
 
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started.
 
 ## 📄 License
 
