@@ -28,6 +28,15 @@ Homepage = "https://github.com/yourusername/ai-development-team"
 Documentation = "https://github.com/yourusername/ai-development-team#readme"
 Issues = "https://github.com/yourusername/ai-development-team/issues"
 
+dependencies = [
+    "typer[all]>=0.9.0",
+    "rich>=13.0.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "click>=8.0.0",
+    "pyyaml>=6.0.0"
+]
+
 [project.optional-dependencies]
 dev = [
     "black>=23.0",
@@ -47,20 +56,13 @@ ai = [
     "tiktoken>=0.5.0",
 ]
 
-cli = [
-    "click>=8.0.0",
-    "rich>=13.0.0",
-    "pyyaml>=6.0.0",
-]
 
-all = [
-    "ai-development-team[ai]",
-    "ai-development-team[cli]",
-]
+[project.scripts]
+ai-dev-team = "interfaces.cli.main:app"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["ai_development_team"]
+include = ["agent_core*", "workflows*", "services*", "interfaces*", "config*"]
 
 [tool.black]
 line-length = 88
@@ -88,9 +90,6 @@ warn_unreachable = true
 [[tool.mypy.overrides]]
 module = ["pytest", "_pytest"]
 ignore_missing_imports = true
-
-[project.scripts]
-ai-dev-team = "ai_development_team.cli:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

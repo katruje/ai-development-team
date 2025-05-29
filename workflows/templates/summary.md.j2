@@ -1,0 +1,41 @@
+# Project Summary: {{ project_name }}
+
+## Project Details
+- **Version**: {{ version }}
+- **Author**: {{ author }} <{{ email }}>
+- **Python Version**: {{ python_version }}
+- **Description**: {{ description }}
+
+## Project Structure
+```
+{{ project_name }}/
+├── src/
+│   └── {{ package_name }}/
+│       ├── __init__.py
+│       └── main.py
+├── tests/
+│   └── test_hello_world.py
+├── pyproject.toml
+└── README.md
+```
+
+## Next Steps
+1. Review the generated code in `src/{{ package_name }}/`
+2. Run tests with `pytest`
+3. Start developing your application!
+
+## Development Commands
+```bash
+# Install in development mode
+pip install -e .
+
+# Run tests
+pytest
+
+# Format code
+black .
+isort .
+
+# Check types
+mypy .
+```

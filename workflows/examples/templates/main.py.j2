@@ -1,0 +1,35 @@
+"""
+{{ package_name }} - A simple Hello World application.
+"""
+
+def hello(name: str = "World") -> str:
+    """
+    Return a greeting message.
+
+    Args:
+        name: Name to include in the greeting. Defaults to "World".
+
+    Returns:
+        str: A greeting message.
+    """
+    return f"Hello, {name}!"
+
+
+def main() -> None:
+    """Print a greeting to the console."""
+    print(hello())
+
+
+if __name__ == "__main__":
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="{{ description }}")
+    parser.add_argument(
+        "--name",
+        type=str,
+        default="World",
+        help="Name to greet (default: World)"
+    )
+    
+    args = parser.parse_args()
+    print(hello(args.name))

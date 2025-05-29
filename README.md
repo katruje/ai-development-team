@@ -25,27 +25,38 @@ A personal project implementing an autonomous AI development team that can build
 
 ### Local Development Setup
 
-1. Clone the repository:
+1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/ai-development-team.git
-   cd ai-development-team
+   git clone <repository-url>
+   cd ai_development_team
    ```
 
-2. Create and activate a virtual environment (recommended):
+2. **Run the setup script**:
    ```bash
-   python -m venv .venv
+   chmod +x setup.sh
+   ./setup.sh
+   ```
+   
+   This will:
+   - Create a virtual environment (`.venv`)
+   - Install all dependencies
+   - Set up pre-commit hooks
+
+3. **Activate the virtual environment**:
+   ```bash
    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    ```
 
-3. Install the package in development mode:
+4. **Run the application**:
    ```bash
-   pip install -e ".[dev]"
+   python -m interfaces.cli.main start
    ```
 
-4. Set up pre-commit hooks:
-   ```bash
-   pre-commit install
-   ```
+### Running Tests
+
+```bash
+pytest
+```
 
 ### Docker Development Setup
 
@@ -83,6 +94,40 @@ A framework for building autonomous AI development teams that can understand req
 - **💻 CLI Interface**: Intuitive command-line interface for development workflows
 - **📂 Project Management**: Built-in project structure and management
 - **🔄 Iterative Development**: Continuous improvement through feedback cycles
+- **👩💻 DevelopmentAgent**: Specialized agent for code generation, requirements analysis, and code review
+
+## 🧑‍💻 Development
+
+The `DevelopmentAgent` is a specialized agent for software development tasks. It can:
+
+- Analyze and structure requirements
+- Generate code based on specifications
+- Write code to files
+- Review existing code
+- Maintain knowledge base
+- Track tasks and context in memory
+
+### Basic Usage
+
+```python
+from agent_core.agents.development.agent import DevelopmentAgent
+
+# Initialize the agent
+dev_agent = DevelopmentAgent(config={
+    "name": "CodeGenerator",
+    "skills": ["python", "javascript"]
+})
+
+# Analyze requirements
+requirements = "Create a function that calculates factorial"
+analysis = dev_agent.analyze_requirements(requirements)
+
+# Generate code
+code, metadata = dev_agent.generate_code(requirements)
+print(code)
+```
+
+For more details, see the [Development Agent Documentation](docs/development_agent.md).
 
 ## 🚀 Quick Start
 

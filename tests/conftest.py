@@ -1,7 +1,13 @@
 """Test configuration and fixtures."""
 
 import pytest
-from ai_development_team.core.agent import DevelopmentAgent
+import sys
+from pathlib import Path
+
+# Add the project root to the Python path
+sys.path.append(str(Path(__file__).parent.parent))
+
+from agent_core.agents.architect.agent import ArchitectAgent as DevelopmentAgent
 
 
 @pytest.fixture

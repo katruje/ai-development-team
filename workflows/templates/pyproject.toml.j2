@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=42.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{{ project_name }}"
+version = "{{ version }}"
+description = "{{ description }}"
+authors = [
+    { name = "{{ author }}", email = "{{ email }}" },
+]
+readme = "README.md"
+requires-python = ">={{ python_version }}"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+    "black>=21.5b2",
+    "isort>=5.8.0",
+    "mypy>=0.812",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/yourusername/{{ project_name }}"
+"Bug Tracker" = "https://github.com/yourusername/{{ project_name }}/issues"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+python_classes = "Test*"
+addopts = "-v -s --cov={{ package_name }}"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'

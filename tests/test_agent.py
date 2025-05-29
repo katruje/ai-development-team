@@ -1,23 +1,41 @@
-"""Tests for the DevelopmentAgent class."""
+"""Tests for the DeveloperAgent class."""
 
 import unittest
 from unittest.mock import patch, MagicMock
 from datetime import datetime
+from pathlib import Path
 
-from ai_development_team.core.agent import DevelopmentAgent
+from agent_core.agents.developer.agent import DeveloperAgent
+from agent_core.base import Agent, AgentContext, AgentMessage, AgentRole
 
 
-class TestDevelopmentAgent(unittest.TestCase):
-    """Test cases for the DevelopmentAgent class."""
+class TestDeveloperAgent(unittest.TestCase):
+    """Test cases for the DeveloperAgent class."""
 
     def setUp(self):
         """Set up test fixtures."""
-        self.agent = DevelopmentAgent(name="TestAgent", role="tester")
+        # Create a temporary directory for the test project
+        self.temp_dir = Path(__file__).parent / "temp_test_project"
+        self.temp_dir.mkdir(exist_ok=True)
+        
+        # Initialize the agent and context with required arguments
+        self.agent = DeveloperAgent(config={"name": "TestAgent", "role": "tester"})
+        self.test_context = AgentContext(
+            project_root=self.temp_dir,
+            config={"test": True}
+        )
+    
+    def tearDown(self):
+        """Clean up after tests."""
+        # Clean up the temporary directory
+        if self.temp_dir.exists():
+            import shutil
+            shutil.rmtree(self.temp_dir)
 
     def test_initialization(self):
         """Test agent initialization with default values."""
         self.assertEqual(self.agent.name, "TestAgent")
-        self.assertEqual(self.agent.role, "tester")
+        self.assertEqual(self.agent.role, AgentRole.DEVELOPER)
         self.assertIn("python", self.agent.skills)
         self.assertIn("conversation", self.agent.memory)
         self.assertIn("tasks", self.agent.memory)
@@ -46,13 +64,23 @@ class TestDevelopmentAgent(unittest.TestCase):
 
     def test_write_code(self):
         """Test the write_code method."""
-        task = "Create a main function"
-        with patch.object(self.agent, 'generate_code') as mock_generate:
-            mock_generate.return_value = ("def main(): pass", {})
-            result = self.agent.write_code(task)
+        test_file = self.temp_dir / "test_file.py"
+        test_code = "def main(): pass"
+        
+        # Test writing new file
+        result = self.agent.write_code(str(test_file), test_code)
+        self.assertTrue(result)
+        self.assertTrue(test_file.exists())
+        self.assertEqual(test_file.read_text(), test_code)
+        
+        # Test overwrite protection
+        with self.assertRaises(FileExistsError):
+            self.agent.write_code(str(test_file), "new code")
             
-            self.assertEqual(result, "def main(): pass")
-            mock_generate.assert_called_once_with(task, None)
+        # Test forced overwrite
+        result = self.agent.write_code(str(test_file), "new code", overwrite=True)
+        self.assertTrue(result)
+        self.assertEqual(test_file.read_text(), "new code")
 
     def test_review_code(self):
         """Test code review functionality."""
@@ -74,7 +102,7 @@ class TestDevelopmentAgent(unittest.TestCase):
 
     def test_memory_isolation(self):
         """Test that different agents have isolated memory."""
-        agent2 = DevelopmentAgent(name="AnotherAgent", role="developer")
+        agent2 = DeveloperAgent(name="AnotherAgent", role="developer")
         self.agent.memory["test"] = "value"
         
         self.assertNotIn("test", agent2.memory)

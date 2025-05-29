@@ -1,0 +1,50 @@
+# {{ project_name }}
+
+{{ description }}
+
+## Installation
+
+```bash
+pip install -e .
+```
+
+## Usage
+
+```python
+from {{ package_name }}.main import hello_world
+
+print(hello_world())  # Output: Hello, World!
+```
+
+## Development
+
+### Setup
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   pip install -e ".[dev]"
+   ```
+
+### Running Tests
+
+```bash
+pytest
+```
+
+### Code Formatting
+
+```bash
+black .
+isort .
+```
+
+### Type Checking
+
+```bash
+mypy .
+```
+
+## License
+
+MIT

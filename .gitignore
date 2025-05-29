@@ -87,6 +87,10 @@ dist/
 # Generated files
 generated/
 
+# Workspace and Dev Output (added by Cascade)
+workspace/
+dev_client_output/
+
 # Local development
 local_settings.py
 local_config.py

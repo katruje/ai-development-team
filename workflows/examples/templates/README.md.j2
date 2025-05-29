@@ -1,0 +1,80 @@
+# {{ package_name }}
+
+{{ description }}
+
+## Features
+
+- Print a greeting message to the console
+- Customizable greeting name
+- Command-line interface
+- Comprehensive test suite
+
+## Installation
+
+### Prerequisites
+
+- Python {{ python_version }} or higher
+- pip (Python package manager)
+
+### Using pip
+
+```bash
+pip install -e .
+```
+
+## Usage
+
+### Command Line
+
+```bash
+{{ package_name }} [--name NAME]
+```
+
+Example:
+
+```bash
+{{ package_name }} --name Alice
+# Output: Hello, Alice!
+```
+
+### As a Python Module
+
+```python
+from {{ package_name }}.main import hello
+
+print(hello("World"))  # Output: Hello, World!
+```
+
+## Development
+
+### Setting Up for Development
+
+1. Clone the repository
+2. Install development dependencies:
+
+   ```bash
+   pip install -e ".[dev]"
+   ```
+
+### Running Tests
+
+```bash
+pytest -v
+```
+
+### Code Formatting
+
+This project uses `black` for code formatting and `isort` for import sorting:
+
+```bash
+black .
+isort .
+```
+
+## License
+
+MIT
+
+## Author
+
+{{ author }} <{{ email }}>

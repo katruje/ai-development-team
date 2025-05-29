@@ -1,0 +1,63 @@
+# Project Summary: {{ project_name }}
+
+## Project Details
+- **Name**: {{ package_name }}
+- **Version**: {{ version }}
+- **Description**: {{ description }}
+- **Author**: {{ author }} <{{ email }}>
+- **Python Version**: {{ python_version }}
+
+## Project Structure
+```
+{{ project_name }}/
+├── src/
+│   └── {{ package_name }}/
+│       ├── __init__.py
+│       └── main.py
+├── tests/
+│   └── test_hello_world.py
+├── pyproject.toml
+└── README.md
+```
+
+## Next Steps
+
+1. **Review Generated Code**
+   - Check the generated files in the `{{ project_name }}` directory
+   - Run tests to verify everything works as expected
+
+2. **Customize the Project**
+   - Update the README with project-specific information
+   - Add your dependencies to `pyproject.toml`
+   - Implement your application logic in `src/{{ package_name }}/`
+
+3. **Version Control**
+   - A git repository has been initialized
+   - Initial commit has been made
+   - Consider connecting to a remote repository (e.g., GitHub)
+
+4. **Development**
+   - Install development dependencies: `pip install -e ".[dev]"`
+   - Run tests: `pytest -v`
+   - Format code: `black . && isort .`
+
+## Generated Files
+
+### `src/{{ package_name }}/main.py`
+- Contains the main application code
+- Implements the `hello()` function
+- Includes a simple command-line interface
+
+### `tests/test_hello_world.py`
+- Contains test cases for the `hello()` function
+- Uses pytest for testing
+
+### `pyproject.toml`
+- Project configuration and metadata
+- Development dependencies and tool configurations
+- Package installation configuration
+
+### `README.md`
+- Project documentation
+- Installation and usage instructions
+- Development setup guide

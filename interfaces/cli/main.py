@@ -3,8 +3,9 @@
 import asyncio
 import logging
 import sys
+from enum import Enum
 from pathlib import Path
-from typing import Optional, Dict, Type, List
+from typing import Optional, Dict, Type, List, Any, TypeVar, Generic
 
 import typer
 from rich.console import Console
@@ -12,10 +13,7 @@ from rich.logging import RichHandler
 from rich.prompt import Prompt
 from rich.panel import Panel
 
-# Add the project root to the Python path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
-# Set up logging first to ensure it's available for all imports
+# Set up logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(message)s",
@@ -24,21 +22,30 @@ logging.basicConfig(
 )
 logger = logging.getLogger("ai_development_team")
 
-# Create the main CLI app
-app = typer.Typer(help="AI Development Team CLI")
-console = Console()
+# Create the main Typer app
+app = typer.Typer(
+    name="ai-dev-team",
+    help="AI Development Team CLI",
+    add_completion=False,
+)
 
-# Import base classes after setting up logging
-from agent_core.base import Agent, AgentContext, AgentMessage, AgentRole
+# Import agent core components
+try:
+    from agent_core.agents.architect.agent import ArchitectAgent
+    from agent_core.base.agent import AgentRole, Agent
+    from agent_core.base.protocols import AgentContext
+except ImportError as e:
+    logging.error("Failed to import agent core components: %s", e)
+    raise
 
-# Import and register subcommands after app is created to avoid circular imports
-from interfaces.cli.commands.architect import register_commands as register_architect_commands
+# Import commands
+from .commands.architect import register_commands as register_architect_commands
 
-# Register architect commands
+# Register commands from modules
 register_architect_commands(app)
 
 # Agent registry
-AGENT_REGISTRY: Dict[AgentRole, Type[Agent]] = {}
+agent_registry: Dict[AgentRole, Type[Agent]] = {}
 
 def register_agent(role: AgentRole, agent_class: Type[Agent]) -> None:
     """Register an agent class for a specific role.
@@ -47,13 +54,17 @@ def register_agent(role: AgentRole, agent_class: Type[Agent]) -> None:
         role: The role of the agent
         agent_class: The agent class to register
     """
-    AGENT_REGISTRY[role] = agent_class
+    agent_registry[role] = agent_class
+    logger.debug("Registered agent %s for role %s", agent_class.__name__, role)
 
 # Import agent implementations after registry is defined
 from agent_core.agents.architect import ArchitectAgent
+# DevelopmentAgent is now imported from agent_core.agents.architect.agent
+from agent_core.agents.architect.agent import ArchitectAgent as DevelopmentAgent
 
 # Register built-in agents
 register_agent(AgentRole.ARCHITECT, ArchitectAgent)
+register_agent(AgentRole.DEVELOPER, DevelopmentAgent)
 
 def get_agent(role: AgentRole) -> Agent:
     """Get an agent instance for the given role.
@@ -67,15 +78,17 @@ def get_agent(role: AgentRole) -> Agent:
     Raises:
         ValueError: If no agent is registered for the given role
     """
-    agent_class = AGENT_REGISTRY.get(role)
-    if not agent_class:
+    if role not in agent_registry:
         raise ValueError(f"No agent registered for role: {role}")
+    
+    agent_class = agent_registry[role]
+    logger.debug("Creating agent instance for role %s: %s", role, agent_class.__name__)
     return agent_class()
 
 class InteractiveSession:
     """Interactive session with an agent."""
     
-    def __init__(self, agent: Agent, context: AgentContext):
+    def __init__(self, agent: Agent, context: AgentContext) -> None:
         """Initialize the session.
         
         Args:
@@ -84,36 +97,34 @@ class InteractiveSession:
         """
         self.agent = agent
         self.context = context
+        self.console = Console()
     
-    async def run(self):
+    async def run(self) -> None:
         """Run the interactive session."""
-        console.print(f"[bold green]AI Development Team - {self.agent.role.value.title()} Agent[/bold green]")
-        console.print("Type 'exit' or 'quit' to end the session\n")
+        self.console.print(Panel.fit(
+            f"[bold blue]AI Development Team - {self.agent.role.value} Session[/bold blue]\n"
+            f"Type 'exit' to end the session.",
+            border_style="blue"
+        ))
         
         while True:
             try:
-                # Get user input
-                user_input = Prompt.ask("You")
+                user_input = Prompt.ask("\n[bold]You[/bold]")
                 
-                # Check for exit commands
                 if user_input.lower() in ("exit", "quit"):
+                    self.console.print("\n[bold]Ending session. Goodbye![/bold]")
                     break
                 
-                # Create and process the message
-                message = AgentMessage(
-                    role=self.agent.role,
-                    content=user_input
-                )
-                
-                # Get the agent's response
-                response = await self.agent.process_message(message, self.context)
-                console.print(f"[bold blue]Agent ({self.agent.role.value}):[/bold blue] {response.content}")
+                # Process the input with the agent
+                response = await self.agent.process_input(user_input, self.context)
+                self.console.print(f"\n[bold]{self.agent.role.value}:[/bold] {response}")
                 
             except KeyboardInterrupt:
-                console.print("\nGoodbye!")
+                self.console.print("\n[bold]Interrupted by user.[/bold]")
                 break
-            except Exception as e:
-                logger.exception("An error occurred:")
+            except Exception as e:  # pylint: disable=broad-except
+                self.console.print(f"\n[bold red]Error: {e}[/bold red]")
+                logger.exception("Error in interactive session")
 
 @app.command()
 def start(
@@ -127,33 +138,39 @@ def start(
     role: str = typer.Option(
         "architect", "--role", "-r", help="Agent role to start with"
     ),
-):
+) -> None:
     """Start the AI Development Team CLI."""
-    # Configure logging level
+    # Set logging level
     log_level = logging.DEBUG if verbose else logging.INFO
-    logger.setLevel(log_level)
+    logging.getLogger().setLevel(log_level)
     
-    # Initialize the agent system
-    project_path = str(Path(project_path).absolute())
+    # Resolve project path
+    project_path = Path(project_path).resolve()
+    
+    # Create project directory if it doesn't exist
+    project_path.mkdir(parents=True, exist_ok=True)
+    
+    # Create agent context
     context = AgentContext(
-        project_root=project_path,
-        config={"verbose": verbose}
+        project_path=project_path,
+        verbose=verbose
     )
     
+    # Get the agent
     try:
-        # Get the requested agent
-        agent_role = AgentRole(role.lower())
+        agent_role = AgentRole(role.upper())
         agent = get_agent(agent_role)
-        
-        # Start the interactive session
-        session = InteractiveSession(agent, context)
-        asyncio.run(session.run())
-        
     except ValueError as e:
-        console.print(f"[red]Error: {e}[/red]")
-        console.print("\nAvailable roles:")
-        for r in AgentRole:
-            console.print(f"- {r.value}")
+        logger.error("Invalid agent role: %s", role)
+        logger.info("Available roles: %s", ", ".join(r.value.lower() for r in AgentRole))
+        raise typer.Exit(1) from e
+    
+    # Start interactive session
+    console = Console()
+    console.print(f"[bold green]Starting {agent_role.value} session...[/bold green]")
+    
+    session = InteractiveSession(agent, context)
+    asyncio.run(session.run())
 
 if __name__ == "__main__":
     app()
