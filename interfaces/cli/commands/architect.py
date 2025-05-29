@@ -1,53 +1,111 @@
 """CLI commands for interacting with the Architect agent."""
 
+import asyncio
 import typer
+from pathlib import Path
 from typing import Optional
 from rich.console import Console
 from rich.panel import Panel
 
-# Import from the full path to avoid relative import issues
 from agent_core.agents.architect import ArchitectAgent
 from agent_core.base import AgentContext, AgentMessage, AgentRole
 
-# Create the Typer app
-app = typer.Typer(help="Commands for the Architect agent")
+# Create the Typer app for architect commands
+app = typer.Typer(help="Architect agent commands")
 console = Console()
 
-@app.command(name="analyze")
+def register_commands(main_app: typer.Typer) -> None:
+    """Register architect commands with the main app.
+    
+    Args:
+        main_app: The main Typer app to register commands with
+    """
+    main_app.add_typer(
+        app,
+        name="architect",
+        help="Architect agent commands"
+    )
+
+def create_agent_context(project_path: str, verbose: bool = False) -> AgentContext:
+    """Create an agent context with the given project path."""
+    return AgentContext(
+        project_root=str(Path(project_path).absolute()),
+        config={
+            "verbose": verbose,
+            "project_path": str(Path(project_path).absolute())
+        }
+    )
+
+@app.command("analyze")
 def analyze_project(
     project_path: str = typer.Argument(
-        ...,
-        help="Path to the project to analyze"
+        "",
+        help="Path to the project directory (default: current directory)",
+        show_default=True
     ),
     verbose: bool = typer.Option(
         False, "--verbose", "-v",
         help="Enable verbose output"
     ),
 ):
-    """Analyze the project structure and provide architectural insights."""
+    """Analyze a project's structure and dependencies."""
     try:
+        project_path = project_path or "."
+        context = create_agent_context(project_path, verbose)
+        
+        if verbose:
+            console.print(f"[dim]Analyzing project at: {context.project_root}[/]")
+        
         agent = ArchitectAgent()
-        context = AgentContext(
-            project_root=project_path,
-            config={"verbose": verbose}
-        )
         
-        console.print(Panel(
-            "[bold blue]Architect Agent[/bold blue] - Analyzing project...",
-            border_style="blue"
-        ))
-        
-        # Create a message to trigger project structure analysis
+        # Run analysis
         message = AgentMessage(
             role=AgentRole.ARCHITECT,
-            content="Show me the project structure"
+            content="analyze project"
         )
         
-        # Run the agent asynchronously
-        import asyncio
         response = asyncio.run(agent.process_message(message, context))
         
-        # Print the response
+        if response and response.content:
+            console.print(f"\n{response.content}")
+            
+    except Exception as e:
+        console.print(f"[red]Error:[/red] {str(e)}", style="bold red")
+        if verbose:
+            import traceback
+            console.print(traceback.format_exc())
+        raise typer.Exit(1)
+
+@app.command("structure")
+def show_structure(
+    project_path: str = typer.Argument(
+        "",
+        help="Path to the project directory (default: current directory)",
+        show_default=True
+    ),
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v",
+        help="Enable verbose output"
+    ),
+):
+    """Show the project's file structure."""
+    try:
+        project_path = project_path or "."
+        context = create_agent_context(project_path, verbose)
+        
+        if verbose:
+            console.print(f"[dim]Showing structure for: {context.project_root}[/]")
+        
+        agent = ArchitectAgent()
+        
+        # Request project structure
+        message = AgentMessage(
+            role=AgentRole.ARCHITECT,
+            content="show project structure"
+        )
+        
+        response = asyncio.run(agent.process_message(message, context))
+        
         if response and response.content:
             console.print(f"\n{response.content}")
             

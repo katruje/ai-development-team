@@ -1,22 +1,23 @@
 # AI Development Team
 
-An autonomous AI development team that can build software based on high-level requirements.
+An autonomous AI development team that can build software based on high-level requirements through specialized AI agents working together.
 
-## Features
+## ✨ Features
 
-- 🤖 Multiple specialized AI agents (Architect, Developer, QA, Technical Writer)
-- 🔄 End-to-end software development workflow
-- 📝 Automated documentation generation
-- 🧪 Built-in testing and validation
-- 🚀 CLI interface for interaction
+- 🤖 **Multi-agent System**: Specialized agents (Architect, Developer, QA) collaborating on projects
+- 🏗️ **Project Analysis**: Automatic project structure and dependency analysis
+- 📊 **Architecture Design**: AI-assisted system design and architecture planning
+- 🔍 **Code Analysis**: Intelligent code review and quality assessment
+- 🛠️ **CLI Interface**: Easy-to-use command-line interface
+- 📦 **Modular Design**: Extensible architecture for adding new capabilities
 
-## Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
 
 - Python 3.9+
 - Git
-- (Optional) Poetry for dependency management
+- pip (Python package manager)
 
 ### Installation
 
@@ -26,61 +27,97 @@ An autonomous AI development team that can build software based on high-level re
    cd ai-development-team
    ```
 
-2. Install dependencies:
+2. Create and activate a virtual environment (recommended):
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
+
+3. Install the package in development mode:
    ```bash
    pip install -e ".[dev]"
    ```
 
-3. Set up pre-commit hooks:
+4. Set up pre-commit hooks:
    ```bash
    pre-commit install
    ```
 
-## Usage
+## 🛠️ Usage
+
+### Basic Commands
 
 ```bash
-# Start the AI development team
-python -m interfaces.cli.main
+# Start the interactive CLI
+python -m interfaces.cli.main start
+
+# Show help
+python -m interfaces.cli.main --help
+
+# Work with the architect agent
+python -m interfaces.cli.main architect --help
 ```
 
-## Project Structure
+### Architect Agent Examples
+
+Analyze a project:
+```bash
+python -m interfaces.cli.main architect analyze ./your-project --verbose
+```
+
+Show project structure:
+```bash
+python -m interfaces.cli.main architect structure ./your-project
+```
+
+## 🏗️ Project Structure
 
 ```
 ai_development_team/
-├── agent_core/           # Core AI agent logic
-├── workflows/            # Workflow definitions
-├── services/             # Reusable services
+├── agent_core/           # Core AI agent implementations
+│   └── agents/           # Individual agent implementations
+│       └── architect/    # Architect agent
 ├── interfaces/           # User interfaces
-├── config/               # Configuration
+│   └── cli/              # Command-line interface
+├── services/             # Reusable services
+├── config/               # Configuration management
 ├── tests/                # Test suite
 └── docs/                 # Documentation
 ```
 
-## Development
+## 📚 Documentation
+
+- [Architecture](./docs/architecture.md) - System architecture and design decisions
+- [Changelog](./CHANGELOG.md) - Development history and changes
+
+## 🧪 Development
 
 ### Code Style
 
-We use:
-- Black for code formatting
-- isort for import sorting
-- flake8 for linting
-- mypy for type checking
+We enforce consistent code style using:
+- `black` - Code formatting
+- `isort` - Import sorting
+- `flake8` - Linting
+- `mypy` - Static type checking
 
-### Testing
+### Running Tests
 
-Run tests with:
 ```bash
+# Run all tests
 pytest
+
+# Run with coverage report
+pytest --cov=ai_development_team --cov-report=term-missing
 ```
 
-### Contributing
+### Pre-commit Hooks
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a pull request
+Pre-commit hooks are configured to automatically format and check your code before each commit.
 
-## License
+## Development Status
 
-MIT
+This project is currently in active development and not yet ready for production use.
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

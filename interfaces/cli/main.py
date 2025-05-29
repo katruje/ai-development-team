@@ -4,23 +4,18 @@ import asyncio
 import logging
 import sys
 from pathlib import Path
-from typing import Optional, Dict, Type
+from typing import Optional, Dict, Type, List
 
 import typer
 from rich.console import Console
 from rich.logging import RichHandler
 from rich.prompt import Prompt
+from rich.panel import Panel
 
 # Add the project root to the Python path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from agent_core.base import Agent, AgentContext, AgentMessage, AgentRole
-from agent_core.agents.architect import ArchitectAgent
-
-# Import commands
-from interfaces.cli import commands
-
-# Set up logging
+# Set up logging first to ensure it's available for all imports
 logging.basicConfig(
     level=logging.INFO,
     format="%(message)s",
@@ -29,13 +24,36 @@ logging.basicConfig(
 )
 logger = logging.getLogger("ai_development_team")
 
-app = typer.Typer()
+# Create the main CLI app
+app = typer.Typer(help="AI Development Team CLI")
 console = Console()
 
+# Import base classes after setting up logging
+from agent_core.base import Agent, AgentContext, AgentMessage, AgentRole
+
+# Import and register subcommands after app is created to avoid circular imports
+from interfaces.cli.commands.architect import register_commands as register_architect_commands
+
+# Register architect commands
+register_architect_commands(app)
+
 # Agent registry
-AGENT_REGISTRY: Dict[AgentRole, Type[Agent]] = {
-    AgentRole.ARCHITECT: ArchitectAgent,
-}
+AGENT_REGISTRY: Dict[AgentRole, Type[Agent]] = {}
+
+def register_agent(role: AgentRole, agent_class: Type[Agent]) -> None:
+    """Register an agent class for a specific role.
+    
+    Args:
+        role: The role of the agent
+        agent_class: The agent class to register
+    """
+    AGENT_REGISTRY[role] = agent_class
+
+# Import agent implementations after registry is defined
+from agent_core.agents.architect import ArchitectAgent
+
+# Register built-in agents
+register_agent(AgentRole.ARCHITECT, ArchitectAgent)
 
 def get_agent(role: AgentRole) -> Agent:
     """Get an agent instance for the given role.

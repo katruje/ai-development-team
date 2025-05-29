@@ -2,9 +2,8 @@
 
 import typer
 
-# Import command modules here to register them with Typer
-from . import architect as architect_commands
+# Create a Typer app instance for commands
+app = typer.Typer(help="AI Development Team Commands")
 
-# Expose the app for registration in main.py
-app = typer.Typer()
-app.add_typer(architect_commands.app, name="architect", help="Architect agent commands")
+# Import and register command modules here
+# This is done in main.py to avoid circular imports
