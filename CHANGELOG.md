@@ -16,7 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pre-commit hooks configuration
 - Test coverage reporting
 - Type checking with mypy
-- Code formatting with Black and isort
+- Code style enforcement with Flake8 and isort
+- Black removed as a dependency and formatting tool
 - Linting with flake8
 
 ### Changed

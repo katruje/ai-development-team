@@ -1,4 +1,17 @@
 repos:
+# Local hook for compliance checking
+-   repo: local
+    hooks:
+    -   id: compliance-check
+        name: AI Agent Compliance Check
+        description: Run the AI Agent compliance checker
+        entry: ./scripts/check_compliance.py
+        language: system
+        types: [python]
+        pass_filenames: false
+        always_run: true
+
+# Code formatting and linting
 -   repo: https://github.com/psf/black
     rev: 23.12.1
     hooks:
@@ -33,6 +46,7 @@ repos:
       args: [--strict, --ignore-missing-imports]
       exclude: ^tests/.*$
 
+# General pre-commit hooks
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:

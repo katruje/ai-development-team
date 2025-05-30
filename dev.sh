@@ -30,7 +30,11 @@ if [ "$(docker ps -q -f name=ai-dev-team)" ]; then
   echo "\nYou can now access the container with:"
   echo "  docker-compose exec ai-dev-team bash"
   echo "\nOr run a command directly:"
-  echo "  docker-compose exec ai-dev-team python -m interfaces.cli.main --help"
+  echo "  docker-compose exec ai-dev-team python3 -m interfaces.cli.main --help"
+  
+  # Create an alias in the container for python -> python3
+  echo "\nConfiguring Python environment in container..."
+  docker-compose exec -T ai-dev-team bash -c "echo 'alias python=python3' >> ~/.bashrc && echo '✅ Python alias configured in container'"
   echo "\nTo view logs:"
   echo "  docker-compose logs -f"
   echo "\nTo stop the container:"
@@ -40,3 +44,7 @@ else
   echo "  docker-compose logs"
   exit 1
 fi
+
+echo "\n📝 NOTE: Always use 'python3' when running commands in Docker environments"
+echo "    The container has been configured with an alias: 'python' → 'python3'"
+echo "    This helps prevent 'command not found: python' errors."

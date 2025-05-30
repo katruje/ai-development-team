@@ -3,11 +3,13 @@
 import pytest
 import sys
 from pathlib import Path
+from agent_core.agents.architect.agent import (
+    ArchitectAgent as DevelopmentAgent,
+)
+
 
 # Add the project root to the Python path
 sys.path.append(str(Path(__file__).parent.parent))
-
-from agent_core.agents.architect.agent import ArchitectAgent as DevelopmentAgent
 
 
 @pytest.fixture
@@ -17,7 +19,7 @@ def sample_agent():
         name="TestAgent",
         role="tester",
         skills=["python", "testing"],
-        knowledge_base={"test_knowledge": True}
+        knowledge_base={"test_knowledge": True},
     )
 
 

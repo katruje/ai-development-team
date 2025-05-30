@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ai-development-team"
+name = "ai_development_team"
 version = "0.1.0"
 description = "An autonomous AI development team for building software"
 authors = [
@@ -22,24 +22,24 @@ classifiers = [
     "Topic :: Software Development",
     "Topic :: Software Development :: Code Generators",
 ]
-
-[project.urls]
-Homepage = "https://github.com/yourusername/ai-development-team"
-Documentation = "https://github.com/yourusername/ai-development-team#readme"
-Issues = "https://github.com/yourusername/ai-development-team/issues"
-
 dependencies = [
     "typer[all]>=0.9.0",
     "rich>=13.0.0",
     "pydantic>=2.0.0",
     "python-dotenv>=1.0.0",
     "click>=8.0.0",
-    "pyyaml>=6.0.0"
+    "pyyaml>=6.0.0",
+    "jinja2>=3.0.0"
 ]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/ai-development-team"
+Documentation = "https://github.com/yourusername/ai-development-team#readme"
+Issues = "https://github.com/yourusername/ai-development-team/issues"
 
 [project.optional-dependencies]
 dev = [
-    "black>=23.0",
+
     "isort>=5.12.0",
     "flake8>=6.0.0",
     "mypy>=1.0.0",
@@ -48,31 +48,26 @@ dev = [
     "pre-commit>=3.0.0",
     "pytest-mock>=3.10.0",
     "types-PyYAML>=6.0.0",
+    "pytest-asyncio>=0.23.0"
 ]
-
 ai = [
     "openai>=1.0.0",
     "langchain>=0.0.200",
     "tiktoken>=0.5.0",
 ]
 
-
 [project.scripts]
 ai-dev-team = "interfaces.cli.main:app"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["agent_core*", "workflows*", "services*", "interfaces*", "config*"]
-
-[tool.black]
-line-length = 88
-target-version = ["py39"]
-include = '\\.pyi?$'
+[tool.setuptools.packages]
+find = { where = ["."], include = ["agent_core*", "workflows*", "services*", "interfaces*", "config*"] }
 
 [tool.isort]
-profile = "black"
 line_length = 88
+profile = "black"
+target_version = "py39"
 known_first_party = ["ai_development_team"]
+# include = '\.pyi?$'
 
 [tool.mypy]
 python_version = "3.9"

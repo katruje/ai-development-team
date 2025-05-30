@@ -25,9 +25,9 @@ COPY pyproject.toml setup.py README.md ./
 COPY requirements.txt .
 
 # Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir -e ".[dev]"
+RUN python3 -m pip install --no-cache-dir --upgrade pip && \
+    python3 -m pip install --no-cache-dir -r requirements.txt && \
+    python3 -m pip install --no-cache-dir -e ".[dev]"
 
 # Copy the rest of the application code
 COPY . .
@@ -35,8 +35,12 @@ COPY . .
 # Change ownership of the application code to the non-root user
 RUN chown -R developer:developer /app
 
+# Configure Python command consistency
+RUN echo 'alias python=python3' >> /home/developer/.bashrc && \
+    echo 'export PYTHONPATH=/app' >> /home/developer/.bashrc
+
 # Switch to the non-root user
 USER developer
 
 # Set the default command to run the application
-CMD ["python", "-m", "interfaces.cli.main", "start"]
+CMD ["python3", "-m", "interfaces.cli.main", "start"]

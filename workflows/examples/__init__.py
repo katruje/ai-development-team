@@ -1,10 +1,8 @@
 """Hello World workflow implementation."""
 
-import os
-import shutil
 import subprocess
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 import yaml
 from jinja2 import Environment, FileSystemLoader
@@ -87,9 +85,7 @@ class HelloWorldWorkflow:
                 text=True,
             )
         except subprocess.CalledProcessError as e:
-            raise WorkflowError(
-                f"Command failed with code {e.returncode}: {e.stderr}"
-            )
+            raise WorkflowError(f"Command failed with code {e.returncode}: {e.stderr}")
 
     def run_step(self, step: Dict[str, Any], context: Dict[str, Any]) -> None:
         """Execute a single workflow step.
@@ -153,7 +149,9 @@ def main() -> None:
     """Run the Hello World workflow."""
     import argparse
 
-    parser = argparse.ArgumentParser(description="Generate a Hello World Python package.")
+    parser = argparse.ArgumentParser(
+        description="Generate a Hello World Python package."
+    )
     parser.add_argument(
         "--config",
         default=Path(__file__).parent / "config.yaml",

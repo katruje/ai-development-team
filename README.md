@@ -1,6 +1,11 @@
 # AI Development Team
 
-A personal project implementing an autonomous AI development team that can build software based on high-level requirements through specialized AI agents working together.
+A framework for building autonomous AI development teams that can understand requirements and generate software through iterative development cycles.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
 > **Note**: This is a personal project and not currently accepting external contributions.
 
@@ -18,12 +23,13 @@ A personal project implementing an autonomous AI development team that can build
 
 ### Prerequisites
 
-- Python 3.9+
-- Git
-- pip (Python package manager)
-- Docker & Docker Compose (for containerized development)
+- **macOS (recommended)** or Linux
+- **Python 3.9+** (3.13+ recommended)
+- **Git**
+- **Docker & Docker Compose** (for containerized development)
+- **Homebrew** (macOS) or appropriate package manager (Linux)
 
-### Local Development Setup
+### Automated Setup (Recommended)
 
 1. **Clone the repository**:
    ```bash
@@ -33,161 +39,71 @@ A personal project implementing an autonomous AI development team that can build
 
 2. **Run the setup script**:
    ```bash
-   chmod +x setup.sh
-   ./setup.sh
+   chmod +x dev_setup.sh
+   ./dev_setup.sh
    ```
    
    This will:
-   - Create a virtual environment (`.venv`)
-   - Install all dependencies
-   - Set up pre-commit hooks
+   - Install required system dependencies
+   - Set up a Python virtual environment
+   - Install all Python dependencies
+   - Configure git hooks
+   - Verify the environment setup
+   - Ensure Python command consistency and set up the development environment
 
-3. **Activate the virtual environment**:
+3. **Activate the virtual environment** (if not already activated):
    ```bash
    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    ```
 
 4. **Run the application**:
    ```bash
-   python -m interfaces.cli.main start
+   ./run_app.sh
    ```
 
-### Running Tests
+### Manual Setup
+
+For detailed manual setup instructions, see the [Environment Setup Guide](docs/environment_setup.md).
+
+## 🧪 Testing
+
+Run the test suite with:
 
 ```bash
-pytest
+# Run all tests
+./run_tests.sh
+
+# Run a specific test file
+./run_tests.sh tests/test_example.py
+
+# Run with coverage report
+pytest --cov=ai_development_team tests/
 ```
 
-### Docker Development Setup
+## 🛠 Development Tools
 
-1. Build and start the development container:
-   ```bash
-   ./dev.sh build
-   ./dev.sh start
-   ```
+### Helper Scripts
 
-2. Access the container shell:
-   ```bash
-   ./dev.sh shell
-   ```
+This project includes several helper scripts to streamline development:
 
-3. Stop the container when done:
-   ```bash
-   ./dev.sh stop
-   ```
+- `./run_app.sh` - Run the application with proper environment setup
+- `./run_tests.sh` - Run tests with proper environment setup
+- `./scripts/run_python.sh` - Run Python scripts with the correct environment
+- `./scripts/check_environment.py` - Verify the development environment
+- `./scripts/ensure_python.py` - Ensure Python command consistency and set up the development environment
 
-## 🛠️ Usage
-
-### 🚀 AI Development Team
-
-A framework for building autonomous AI development teams that can understand requirements and generate software through iterative development cycles.
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
-
-## 🎯 Features
-
-- **🤖 Autonomous Agents**: AI agents that understand requirements, design systems, and write code
-- **🧩 Modular Architecture**: Extensible with new agent types and capabilities
-- **💻 CLI Interface**: Intuitive command-line interface for development workflows
-- **📂 Project Management**: Built-in project structure and management
-- **🔄 Iterative Development**: Continuous improvement through feedback cycles
-- **👩💻 DevelopmentAgent**: Specialized agent for code generation, requirements analysis, and code review
-- **📝 TechnicalWriterAgent**: Manages documentation generation, validation, and maintenance
-
-## 🧑‍💻 Development
-
-The `DevelopmentAgent` is a specialized agent for software development tasks. It can:
-
-- Analyze and structure requirements
-- Generate code based on specifications
-- Write code to files
-- Review existing code
-- Maintain knowledge base
-- Track tasks and context in memory
-
-### Basic Usage
-
-```python
-from agent_core.agents.development.agent import DevelopmentAgent
-
-# Initialize the agent
-dev_agent = DevelopmentAgent(config={
-    "name": "CodeGenerator",
-    "skills": ["python", "javascript"]
-})
-
-# Analyze requirements
-requirements = "Create a function that calculates factorial"
-analysis = dev_agent.analyze_requirements(requirements)
-
-# Generate code
-code, metadata = dev_agent.generate_code(requirements)
-print(code)
-```
-
-For more details, see the following documentation:
-- [Development Agent Documentation](docs/development_agent.md)
-- [Technical Writer Agent Documentation](docs/technical_writer_agent.md)
-
-## 🚀 Quick Start
-
-### Installation
+### Code Quality
 
 ```bash
-# Install from source
-git clone https://github.com/yourusername/ai-development-team.git
-cd ai-development-team
-pip install -e .[all]
-```
+# Format code with flake8 and isort
 
-### Basic Usage
+isort .
 
-1. **Create a new project**:
-   ```bash
-   aidev project create my_project --description "My awesome project"
-   ```
+# Check for style issues
+flake8
 
-2. **Navigate to project directory**:
-   ```bash
-   cd my_project
-   ```
-
-3. **Start development workflow**:
-   ```bash
-   aidev workflow start .
-   ```
-
-4. **Analyze requirements**:
-   ```bash
-   aidev workflow analyze .
-   ```
-
-5. **Generate system design**:
-   ```bash
-   aidev workflow design .
-   ```
-
-## 🏗️ Project Structure
-
-```
-ai_development_team/
-├── core/                  # Core functionality
-│   ├── __init__.py
-│   ├── agent.py          # Base agent implementation
-│   ├── project.py        # Project management
-│   └── workflow.py       # Development workflow orchestration
-├── interfaces/           # User interfaces
-│   └── cli/              # Command-line interface
-│       ├── __init__.py
-│       └── main.py       # CLI entry point
-├── models/               # Data models
-├── utils/                # Utility functions
-│   ├── __init__.py
-│   └── logging.py        # Logging configuration
-└── tests/                # Test suite
+# Run type checking
+mypy .
 ```
 
 ## 🛠️ Development
@@ -232,7 +148,7 @@ pytest tests/test_agent.py -v
 
 This project enforces code quality through:
 
-- **Black** for code formatting
+- **Flake8** for code formatting
 - **isort** for import sorting
 - **flake8** for linting
 - **mypy** for static type checking
@@ -240,7 +156,7 @@ This project enforces code quality through:
 Run all checks:
 
 ```bash
-black .
+
 isort .
 flake8
 mypy .

@@ -1,0 +1,20 @@
+[flake8]
+max-line-length = 88
+extend-ignore = E203
+exclude = 
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    .mypy_cache,
+    .pytest_cache,
+    build,
+    dist,
+    */migrations/*,
+    */node_modules/*
+per-file-ignores =
+    # Allow imports not at top of file in __init__.py
+    __init__.py: E402
+    # Temporarily ignore these files
+    agent_core/agents/developer/agent.py: E501
+    interfaces/cli/commands/qa.py: E501

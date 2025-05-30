@@ -16,7 +16,7 @@ The AI Development Team is built around a modular, agent-based architecture wher
 
 #### Agent Roles
 - **Architect**: Responsible for system design and project analysis
-- **Developer**: Handles code generation and implementation
+- **Developer**: Handles code generation, implementation, and file system operations
 - **QA**: Manages testing and quality assurance
 - **Technical Writer**: Creates and maintains documentation
 
@@ -95,6 +95,41 @@ dev_client_output/         # Local sandbox for testing
 workspace/                  # Agent working files
 ```
 
+## Python Environment Management
+
+The system implements a robust Python environment management strategy to ensure consistent behavior across different development and deployment environments. This is particularly important given the variations in Python installations across different operating systems.
+
+### Key Components
+
+1. **Virtual Environment**
+   - Managed via `.venv` directory in the project root
+   - Automatically created and configured by `setup.sh`
+   - Includes Python command aliasing to ensure `python` points to the correct version
+
+2. **Helper Scripts**
+   - `run_tests.sh`: Ensures tests run with the correct Python environment
+   - `run_app.sh`: Provides consistent application execution
+   - `scripts/run_python.sh`: General-purpose Python execution wrapper
+
+3. **Docker Integration**
+   - Consistent Python environment in containers
+   - Automatic alias configuration in container shells
+   - Version-pinned base images
+
+### Best Practices
+
+- Always use `python3` explicitly in scripts and documentation
+- Activate the virtual environment before running Python commands
+- Use the provided helper scripts for common tasks
+- Document any Python version requirements clearly
+
+### Troubleshooting
+
+If you encounter "command not found: python" errors:
+1. Ensure the virtual environment is activated: `source .venv/bin/activate`
+2. Try using `python3` instead of `python`
+3. Run `./setup.sh` to reconfigure the environment
+
 ## Generated Artifacts and Output Management
 
 To maintain clarity and separation of concerns, generated files are categorized and managed as follows:
@@ -170,11 +205,33 @@ This structured approach ensures that client deliverables are kept pristine, the
   - `pytest-mock>=3.10.0` - Mocking for tests
   - `types-PyYAML>=6.0.0` - Type stubs for PyYAML
 
+## File System Operations
+
+The Developer Agent includes robust file system operations with the following features:
+
+- **File Creation**: Create new files with or without content
+- **Directory Handling**: Automatically creates parent directories as needed
+- **Path Resolution**: Supports both relative and absolute paths
+- **Project Context**: Resolves paths relative to the project root
+- **Error Handling**: Comprehensive error handling for file operations
+- **Idempotency**: Safe to retry operations
+
+### Supported Commands
+
+```
+create file <filename> [with content: <content>]
+```
+
+Examples:
+- `create file example.py with content: print("Hello, World!")`
+- `create file src/utils/__init__.py`
+
 ## Performance Considerations
 
 - **Caching**: Heavy operations are cached where possible
 - **Parallelism**: Agents can operate in parallel when independent
 - **Resource Management**: Resources are cleaned up after operations
+- **File Operations**: Efficient handling of file system operations with proper cleanup
 
 ## Security
 
