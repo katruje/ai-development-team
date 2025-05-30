@@ -41,8 +41,16 @@ class Agent(AgentProtocol, abc.ABC):
         Returns:
             The agent's response message
         """
-        context.add_message(message)
-        return await self._process_message(message, context)
+        try:
+            context.add_message(message)
+            return await self._process_message(message, context)
+        except Exception as e:
+            # Create an error response
+            return AgentMessage(
+                role=self.role,
+                content=f"Error processing message: {str(e)}",
+                metadata={"status": "error", "error": str(e)}
+            )
     
     @abc.abstractmethod
     async def _process_message(self, message: AgentMessage, context: AgentContext) -> AgentMessage:

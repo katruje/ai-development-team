@@ -40,8 +40,10 @@ except ImportError as e:
 
 # Import commands
 from .commands.architect import register_commands as register_architect_commands
+from .commands.qa import app as qa_app
 
 # Register commands from modules
+app.add_typer(qa_app, name="qa", help="QA Engineer commands")
 register_architect_commands(app)
 
 # Agent registry
