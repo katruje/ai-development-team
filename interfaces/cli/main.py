@@ -41,9 +41,11 @@ except ImportError as e:
 # Import commands
 from .commands.architect import register_commands as register_architect_commands
 from .commands.qa import app as qa_app
+from .commands.technical_writer import app as docs_app
 
 # Register commands from modules
 app.add_typer(qa_app, name="qa", help="QA Engineer commands")
+app.add_typer(docs_app, name="docs", help="Documentation and technical writing commands")
 register_architect_commands(app)
 
 # Agent registry

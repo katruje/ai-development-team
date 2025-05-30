@@ -95,6 +95,7 @@ A framework for building autonomous AI development teams that can understand req
 - **📂 Project Management**: Built-in project structure and management
 - **🔄 Iterative Development**: Continuous improvement through feedback cycles
 - **👩💻 DevelopmentAgent**: Specialized agent for code generation, requirements analysis, and code review
+- **📝 TechnicalWriterAgent**: Manages documentation generation, validation, and maintenance
 
 ## 🧑‍💻 Development
 
@@ -127,7 +128,9 @@ code, metadata = dev_agent.generate_code(requirements)
 print(code)
 ```
 
-For more details, see the [Development Agent Documentation](docs/development_agent.md).
+For more details, see the following documentation:
+- [Development Agent Documentation](docs/development_agent.md)
+- [Technical Writer Agent Documentation](docs/technical_writer_agent.md)
 
 ## 🚀 Quick Start
 

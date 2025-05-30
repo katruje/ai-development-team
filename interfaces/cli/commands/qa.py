@@ -72,17 +72,21 @@ def run_tests(
     
     # Run tests
     message = AgentMessage(
-        type="run_tests",
-        data={
-            "test_path": test_path,
-            "coverage": coverage
+        role=AgentRole.QA_ENGINEER,
+        content=f"Running tests in {test_path}",
+        metadata={
+            "command": "run_tests",
+            "data": {
+                "test_path": test_path,
+                "coverage": coverage
+            }
         }
     )
     
     response = qa_agent.process_message(message)
     
-    if response.type == "test_results":
-        results = response.data["results"]
+    if response.metadata.get("command") == "test_results":
+        results = response.metadata.get("results", {})
         
         # Display test results
         table = Table(title="Test Results", show_header=True, header_style="bold magenta")
@@ -116,7 +120,8 @@ def run_tests(
         if results["failed"] > 0 or results["errors"] > 0:
             raise typer.Exit(code=1)
     else:
-        console.print(f"[red]Error: {response.data.get('message', 'Unknown error')}[/]")
+        error_message = response.content or response.metadata.get("error", "Unknown error")
+        console.print(f"[red]Error: {error_message}[/]")
         raise typer.Exit(code=1)
 
 @app.command("generate-tests")
@@ -178,21 +183,26 @@ def generate_tests(
     
     # Generate tests
     message = AgentMessage(
-        type="generate_tests",
-        data={
-            "target_path": target_path,
-            "test_type": test_type
+        role=AgentRole.QA_ENGINEER,
+        content=f"Generating {test_type} tests for {target_path}",
+        metadata={
+            "command": "generate_tests",
+            "data": {
+                "target_path": target_path,
+                "test_type": test_type
+            }
         }
     )
     
     response = qa_agent.process_message(message)
     
-    if response.type == "test_generation_result":
-        test_path = response.data.get("test_path", "unknown")
-        console.print(f"[green]✓ Tests generated successfully: {test_path}[/]")
+    if response.metadata.get("command") == "test_generation_result":
+        test_path = response.metadata.get("test_path", "unknown")
+        console.print(f"[green]✓ {response.content or f'Tests generated successfully: {test_path}'}[/]")
         
         if output_dir:
             console.print(f"[dim]Note: Output directory option not yet implemented[/]")
     else:
-        console.print(f"[red]Error: {response.data.get('message', 'Failed to generate tests')}[/]")
+        error_message = response.content or response.metadata.get("error", "Failed to generate tests")
+        console.print(f"[red]Error: {error_message}[/]")
         raise typer.Exit(code=1)
